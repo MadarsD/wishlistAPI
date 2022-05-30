@@ -16,7 +16,6 @@ public class WishListService {
 
     private final WishListRepository wishlistRepository;
 
-
     public Wish addNewWish(Wish wish) {
 
         Optional<Wish> existingWish = wishlistRepository
@@ -24,24 +23,20 @@ public class WishListService {
                         wish.getWish());
 
         if (existingWish.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED);
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
 
         return wishlistRepository.save(wish);
     }
 
     public void updateWish(Long id, String updatedWish) {
-        if (!wishlistRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        doesNotExist(id);
         wishlistRepository.updateWishById(id, updatedWish);
 
     }
 
     public void deleteWish(Long id) {
-        if (!wishlistRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        doesNotExist(id);
         wishlistRepository.deleteById(id);
     }
 
@@ -51,5 +46,11 @@ public class WishListService {
 
     public List<Wish> getWishList() {
         return wishlistRepository.findAll();
+    }
+
+    public void doesNotExist(Long id) {
+        if (!wishlistRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }

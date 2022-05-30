@@ -66,7 +66,7 @@ public class WishListServiceTest {
         }
 
         assert exception != null;
-        Assertions.assertEquals(exception.getMessage(), "208 ALREADY_REPORTED");
+        Assertions.assertEquals(exception.getMessage(), "409 CONFLICT");
     }
 
 
