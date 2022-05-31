@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,26 +16,19 @@ public class WishListService {
     private final WishListRepository wishlistRepository;
 
     public Wish addNewWish(Wish wish) {
-
-        Optional<Wish> existingWish = wishlistRepository
-                .findByWish(
-                        wish.getWish());
-
-        if (existingWish.isPresent()) {
+        if (wishlistRepository.existsByWish(wish.getWish())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
+        } else {
+            return wishlistRepository.save(wish);
         }
-
-        return wishlistRepository.save(wish);
     }
 
-    public void updateWish(Long id, Wish wish) {
-
-        Wish existingWish = wishlistRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        existingWish.setWish(wish.getWish());
-
-        wishlistRepository.save(existingWish);
+    public void updateWish(Wish wish) {
+        if (wishlistRepository.existsById(wish.getId())) {
+            wishlistRepository.save(wish);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     public void deleteWish(Long id) {

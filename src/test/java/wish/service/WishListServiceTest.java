@@ -56,8 +56,8 @@ public class WishListServiceTest {
                 "First wish"
         );
 
-        given(wishListRepository.findByWish(
-                firstWish.getWish())).willReturn(Optional.of(firstWish));
+        given(wishListRepository.existsByWish(
+                firstWish.getWish())).willReturn(true);
 
         try {
             wishListService.addNewWish(identicalWish);
@@ -78,9 +78,9 @@ public class WishListServiceTest {
                 "First wish updated"
         );
 
-        when(wishListRepository.findById(1L)).thenReturn(Optional.of(updatedWish));
+        when(wishListRepository.existsById(firstWish.getId())).thenReturn(true);
 
-        wishListService.updateWish(1L, updatedWish);
+        wishListService.updateWish(updatedWish);
 
         verify(wishListRepository, times(1)).save(updatedWish);
     }
