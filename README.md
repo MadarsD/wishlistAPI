@@ -4,7 +4,7 @@ Simple REST API using Java, Spring Boot & PostgreSQL database.
 
 ### Database configuration
 
-Edit [application.properties](.src/main/resources/application.properties)
+Edit [application.properties](.src/main/resources/application.properties](https://github.com/MadarsD/wishlistAPI/blob/ce86e52e73b451563702af132144fda06ece56c6/src/main/resources/application.properties)
 
 Set `wish-list.store-type=[H2Database or postgresql]` to use either H2 in-memory database or PostgreSQL database. 
 
