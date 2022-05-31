@@ -2,6 +2,17 @@
 
 Simple REST API using Java, Spring Boot & PostgreSQL database. 
 
+### Database configuration
+
+Edit [application.properties](.src/main/resources/application.properties)
+
+Set `wish-list.store-type=[H2Database or postgresql]` to use either H2 in-memory database or PostgreSQL database. 
+
+If `wish-list.store-type=H2Database` then further configuration is not required. 
+
+In case of `wish-list.store-type=postgresql` you will need to change `spring.datasource.url`, `spring.datasource.username` and `spring.datasource.password` for the actual database you are going to use.
+
+
 ### Running
 
 ```shell
