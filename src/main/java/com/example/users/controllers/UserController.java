@@ -10,11 +10,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/")
 public class UserController {
 
-    private UsersRequest usersRequest;
-
-    public UserController(UsersRequest usersRequest) {
-        this.usersRequest = usersRequest;
-    }
 
     @PostMapping("extra")
     public String getNamesFromUsers(@RequestBody UsersRequest usersRequest) {

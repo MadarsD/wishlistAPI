@@ -29,14 +29,20 @@ public class WishListService {
         return wishlistRepository.save(wish);
     }
 
-    public void updateWish(Long id, String updatedWish) {
-        doesNotExist(id);
-        wishlistRepository.updateWishById(id, updatedWish);
+    public void updateWish(Long id, Wish wish) {
 
+        Wish existingWish = wishlistRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        existingWish.setWish(wish.getWish());
+
+        wishlistRepository.save(existingWish);
     }
 
     public void deleteWish(Long id) {
-        doesNotExist(id);
+        if (!wishlistRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         wishlistRepository.deleteById(id);
     }
 
@@ -47,10 +53,5 @@ public class WishListService {
     public List<Wish> getWishList() {
         return wishlistRepository.findAll();
     }
-
-    public void doesNotExist(Long id) {
-        if (!wishlistRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
 }
+

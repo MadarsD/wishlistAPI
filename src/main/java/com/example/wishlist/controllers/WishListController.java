@@ -19,9 +19,9 @@ public class WishListController {
         return wishListService.addNewWish(wish);
     }
 
-    @PutMapping("/update/{id}/{updatedWish}")
-    public void updateWish(@PathVariable("id") Long id, @PathVariable("updatedWish") String updatedWish) {
-        wishListService.updateWish(id, updatedWish);
+    @PatchMapping("/update/{id}")
+    public void updateWish(@PathVariable("id") Long id, @RequestBody Wish wish) {
+        wishListService.updateWish(id, wish);
     }
 
     @DeleteMapping("delete/{id}")

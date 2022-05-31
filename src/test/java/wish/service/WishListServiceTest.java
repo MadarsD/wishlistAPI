@@ -65,32 +65,29 @@ public class WishListServiceTest {
             exception = e;
         }
 
-        assert exception != null;
-        Assertions.assertEquals(exception.getMessage(), "409 CONFLICT");
-    }
+        assertThat(exception).isNotNull();
+        assertThat(exception.getMessage()).isEqualTo("409 CONFLICT");
 
+    }
 
     @DisplayName("Test for updateWish() method")
     @Test
     public void willUpdatePersonWhenPassedIdIsValid() {
 
-        wishListRepository.save(firstWish);
+        Wish updatedWish = new Wish(1L,
+                "First wish updated"
+        );
 
-        when(wishListRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(wishListRepository).updateWishById(1L, "First wish updated");
+        when(wishListRepository.findById(1L)).thenReturn(Optional.of(updatedWish));
 
-        wishListService.updateWish(1L, "First wish updated");
+        wishListService.updateWish(1L, updatedWish);
 
-        verify(wishListRepository, times(1)).updateWishById(1L, "First wish updated");
+        verify(wishListRepository, times(1)).save(updatedWish);
     }
 
     @DisplayName("Test for deleteWish() method when exists")
     @Test
     public void deletingWishIsSuccessfulWhenWishExists() {
-
-        Wish newWish = new Wish(2L, "newWish");
-        wishListRepository.save(firstWish);
-        wishListRepository.save(newWish);
 
         when(wishListRepository.existsById(2L)).thenReturn(true);
         doNothing().when(wishListRepository).deleteById(2L);
@@ -104,23 +101,19 @@ public class WishListServiceTest {
     @Test
     public void deletingWishWillThrowErrorWhenWishNotExists() {
 
-        wishListRepository.save(firstWish);
-
         when(wishListRepository.existsById(2L)).thenReturn(false);
 
         ResponseStatusException thrown = assertThrows(
                 ResponseStatusException.class,
                 () -> wishListService.deleteWish(2L));
 
-        Assertions.assertNotNull(thrown);
+        assertThat(thrown).isNotNull();
         Assertions.assertTrue(Objects.requireNonNull(thrown.getMessage()).contains("404 NOT_FOUND"));
     }
 
     @DisplayName("Test for getWish() method")
     @Test
     public void gettingExistingWishWillReturn() {
-
-        wishListRepository.save(firstWish);
 
         given(wishListRepository.findById(1L)).willReturn(Optional.of(firstWish));
 
@@ -134,8 +127,6 @@ public class WishListServiceTest {
     @Test
     public void gettingNonExistingWishWillThrowError() {
 
-        wishListRepository.save(firstWish);
-
         given(wishListRepository.findById(2L)).willThrow(ResponseStatusException.class);
 
         assertThrows(ResponseStatusException.class, () -> wishListService.getWish(2L));
@@ -146,8 +137,6 @@ public class WishListServiceTest {
     public void returningAllWishesIsSuccessful() {
 
         Wish newWish = new Wish(2L, "newWish");
-        wishListRepository.save(firstWish);
-        wishListRepository.save(newWish);
 
         given(wishListRepository.findAll()).willReturn(List.of(firstWish, newWish));
 
