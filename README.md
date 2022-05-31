@@ -1,6 +1,6 @@
 # Wish List API
 
-Simple REST API using Java, Spring Boot & PostgreSQL database. 
+Simple REST API using Java, Spring Boot & PostgreSQL/H2 databases - you are able to simply configure which one you want to use. 
 
 ### Database configuration
 
